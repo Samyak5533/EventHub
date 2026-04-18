@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard — EventHub</title>
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/css/styles.css" rel="stylesheet" />
+  <style>
+    /* ── Admin Layout ── */
+    .admin-layout { display:flex; min-height:calc(100vh - 60px); }
+
+    /* ── Sidebar ── */
+    .admin-sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      position: relative;
+      z-index: 10;
+    }
+    .sidebar-header { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .sidebar-title  { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+    .sidebar-user   { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-top: 0.25rem; }
+
+    .sidebar-nav-item {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer !important;
+      pointer-events: all !important;
+      transition: all 0.2s ease;
+      display: block;
+      position: relative;
+      z-index: 10;
+    }
+    .sidebar-nav-item:hover  { background: rgba(108,99,255,0.1); color: var(--text); }
+    .sidebar-nav-item.active { background: rgba(108,99,255,0.18); color: var(--primary); font-weight: 700; border-left: 3px solid var(--primary); }
+
+    /* ── Main content ── */
+    .admin-main    { flex: 1; padding: 2rem; overflow-y: auto; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-section-title { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: 1.5rem; }
+
+    /* ── Stat cards ── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 10px 24px rgba(108,99,255,0.18); }
+    .stat-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .stat-card-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.6rem;
+      display: block;
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.75rem;
+    }
+    .stat-icon-purple { background: rgba(108,99,255,0.15); }
+    .stat-icon-green  { background: rgba(34,197,94,0.15);  }
+    .stat-icon-orange { background: rgba(245,158,11,0.15); }
+    .stat-icon-blue   { background: rgba(59,130,246,0.15); }
+    .stat-icon-red    { background: rgba(239,68,68,0.15);  }
+    .stat-card .value { font-size: 1.75rem; font-weight: 800; color: var(--text); line-height: 1; }
+    .stat-card .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; font-weight: 500; }
+
+    /* ── Tables ── */
+    .admin-table-wrap  {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .admin-table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table-header h3 { font-size: 1rem; font-weight: 700; margin: 0; color: var(--text); }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table thead { background: var(--surface-2); }
+    .admin-table th {
+      padding: 0.75rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td {
+      padding: 0.85rem 1rem;
+      font-size: 0.875rem;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .admin-table tbody tr:last-child td { border-bottom: none; }
+    .admin-table tbody tr:hover { background: var(--surface-2); }
+
+    /* ── Status badges ── */
+    .status-active { background: rgba(34,197,94,0.15);  color: #16a34a; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .status-used   { background: rgba(107,114,128,0.15); color: #6b7280; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-free    { background: rgba(34,197,94,0.15);  color: #16a34a; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+
+    /* ── Modals dark mode ── */
+    [data-theme="dark"] .modal-body .form-control,
+    [data-theme="dark"] .modal-body .form-select,
+    [data-theme="dark"] .modal-body textarea {
+      background: var(--input-bg) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    [data-theme="dark"] .modal-body label { color: var(--text-muted); }
+
+    /* ── Toast ── */
+    .toast-container { position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; display:flex; flex-direction:column; gap:0.5rem; }
+    .toast-item {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.75rem 1.1rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      font-size: 0.875rem; color: var(--text);
+      animation: toastIn 0.3s ease;
+      min-width: 260px; max-width: 380px;
+    }
+    .toast-success { border-left: 4px solid var(--success); }
+    .toast-error   { border-left: 4px solid var(--danger);  }
+    .toast-info    { border-left: 4px solid var(--info);    }
+    .toast-warning { border-left: 4px solid var(--warning); }
+    @keyframes toastIn  { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastOut { from { opacity:1; } to { opacity:0; transform:translateY(8px); } }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; padding: 0.75rem; }
+      .admin-main { padding: 1rem; }
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg" style="position:sticky;top:0;z-index:200">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="/">🎟 EventHub</a>
+      <div class="d-flex align-items-center gap-2">
+        <span class="user-badge" id="adminName">👤 admin</span>
+        <a href="/" class="btn btn-sm btn-nav-login">View Site</a>
+        <button id="logoutBtn" class="btn-nav-logout">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Admin Panel</div>
+        <div class="sidebar-user" id="sidebarUser">admin@eventhub.com</div>
+      </div>
+      <button class="sidebar-nav-item active" id="nav-dashboard">📊 Dashboard</button>
+      <button class="sidebar-nav-item"        id="nav-events">🗓 Events</button>
+      <button class="sidebar-nav-item"        id="nav-bookings">🎟 Bookings</button>
+      <button class="sidebar-nav-item"        id="nav-scanner">📷 QR Scanner</button>
+      <button class="sidebar-nav-item"        id="nav-site">🌐 View Site</button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD SECTION -->
+      <section id="section-dashboard" class="admin-section active">
+        <h2 class="admin-section-title">📊 Dashboard Overview</h2>
+
+        <div class="stat-cards">
+          <div class="stat-card" data-nav="events" role="button" tabindex="0" title="View all events">
+            <div class="stat-card-icon stat-icon-purple">🗓</div>
+            <div class="value" id="statEvents">—</div>
+            <div class="label">Total Events</div>
+          </div>
+          <div class="stat-card" data-nav="bookings" role="button" tabindex="0" title="View all bookings">
+            <div class="stat-card-icon stat-icon-green">🎟</div>
+            <div class="value" id="statBookings">—</div>
+            <div class="label">Total Bookings</div>
+          </div>
+          <div class="stat-card" data-nav="bookings" role="button" tabindex="0" title="View all bookings">
+            <div class="stat-card-icon stat-icon-orange">💰</div>
+            <div class="value" id="statRevenue">—</div>
+            <div class="label">Total Revenue</div>
+          </div>
+          <div class="stat-card" data-nav="bookings" role="button" tabindex="0" title="View all bookings">
+            <div class="stat-card-icon stat-icon-blue">✅</div>
+            <div class="value" id="statTickets">—</div>
+            <div class="label">Active Tickets</div>
+          </div>
+          <div class="stat-card" data-nav="bookings" role="button" tabindex="0" title="View all bookings">
+            <div class="stat-card-icon stat-icon-red">👥</div>
+            <div class="value" id="statUsers">—</div>
+            <div class="label">Registered Users</div>
+          </div>
+          <div class="stat-card" data-nav="bookings" role="button" tabindex="0" title="View all bookings">
+            <div class="stat-card-icon stat-icon-green">🎫</div>
+            <div class="value" id="statTicketsSold">—</div>
+            <div class="label">Total Tickets Sold</div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <h3>Recent Bookings</h3>
+            <button id="viewAllBookings" class="btn btn-sm btn-outline-grad">View All</button>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>User</th><th>Event</th><th>Qty</th><th>Amount</th><th>Status</th><th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recentBookingsBody">
+                <tr><td colspan="6" class="text-center py-4" style="color:var(--text-muted)">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- EVENTS SECTION -->
+      <section id="section-events" class="admin-section">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="admin-section-title mb-0">🗓 Manage Events</h2>
+          <button id="btnAddEvent" class="btn btn-primary-grad">+ Add Event</button>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr><th>#</th><th>Title</th><th>Category</th><th>Date</th><th>Price (₹)</th><th>Total Seats</th><th>Sold</th><th>Available</th><th>Revenue (₹)</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="eventsTableBody">
+                <tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOOKINGS SECTION -->
+      <section id="section-bookings" class="admin-section">
+        <h2 class="admin-section-title">🎟 All Bookings</h2>
+        <div class="admin-table-wrap">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr><th>ID</th><th>User Email</th><th>Event</th><th>Qty</th><th>Amount (₹)</th><th>Status</th><th>Date</th></tr>
+              </thead>
+              <tbody id="bookingsTableBody">
+                <tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Add / Edit Event Modal -->
+  <div class="modal fade" id="eventFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventFormTitle">Add New Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="formEventId" />
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label fw-600 small">Event Title *</label>
+              <input id="formTitle" class="form-control" placeholder="Event title" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600 small">Category *</label>
+              <select id="formCategory" class="form-select">
+                <option>Sports</option>
+                <option>Concerts</option>
+                <option>Stand-up comedy</option>
+                <option>Dating events</option>
+                <option>Webinars</option>
+                <option>Music</option>
+                <option>Dance</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-600 small">Description</label>
+              <textarea id="formDesc" class="form-control" rows="3" placeholder="Event description"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600 small">Venue *</label>
+              <input id="formVenue" class="form-control" placeholder="Venue name and city" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-600 small">Date & Time *</label>
+              <input id="formDateTime" type="datetime-local" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600 small">Price in ₹ (max 10,000)</label>
+              <input id="formPrice" type="number" step="1" min="0" max="10000" class="form-control" placeholder="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600 small">Total Seats *</label>
+              <input id="formSeats" type="number" min="1" class="form-control" placeholder="100" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-600 small">Image URL</label>
+              <input id="formImage" class="form-control" placeholder="https://images.unsplash.com/..." />
+            </div>
+          </div>
+          <div id="formAlert" class="alert alert-danger d-none mt-3 py-2 small"></div>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="btnSaveEvent" class="btn btn-primary-grad">💾 Save Event</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    /* =====================================================
+       Admin Dashboard — all logic runs after DOM is ready
+    ===================================================== */
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const token = sessionStorage.getItem('token');
+
+    // ── Auth check — redirect if not admin ───────────
+    let adminPayload = null;
+    try {
+      if (!token) throw new Error('no token');
+      adminPayload = JSON.parse(atob(token.split('.')[1]));
+      if (adminPayload.role !== 'admin') throw new Error('not admin');
+      const name  = adminPayload.name || adminPayload.email?.split('@')[0] || 'Admin';
+      const email = adminPayload.email || 'admin@eventhub.com';
+      document.getElementById('adminName').textContent   = '👤 ' + name;
+      document.getElementById('sidebarUser').textContent = email;
+    } catch (e) {
+      window.location.href = e.message === 'not admin' ? '/' : '/login.html';
+      return; // stop rest of script
+    }
+
+    // ── Auth header for all API calls ─────────────────
+    function authHeaders() {
+      return { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    }
+
+    // ── Toast notification ────────────────────────────
+    function showToast(message, type = 'info') {
+      const icons     = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+      const container = document.getElementById('toastContainer');
+      const toast     = document.createElement('div');
+      toast.className = `toast-item toast-${type}`;
+      toast.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // ── Section switching ─────────────────────────────
+    function showSection(name) {
+      // Hide all sections
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      // Show target section
+      document.getElementById('section-' + name).classList.add('active');
+      // Update sidebar active state
+      document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById('nav-' + name)?.classList.add('active');
+      // Load data for the section
+      if (name === 'events')   loadAdminEvents();
+      if (name === 'bookings') loadBookings();
+    }
+
+    // ── Sidebar button listeners ──────────────────────
+    document.getElementById('nav-dashboard').addEventListener('click', () => showSection('dashboard'));
+    document.getElementById('nav-events').addEventListener('click',    () => showSection('events'));
+    document.getElementById('nav-bookings').addEventListener('click',  () => showSection('bookings'));
+    document.getElementById('nav-scanner').addEventListener('click',   () => window.location = '/scanner.html');
+    document.getElementById('nav-site').addEventListener('click',      () => window.location = '/');
+    document.getElementById('viewAllBookings').addEventListener('click', () => showSection('bookings'));
+
+    // ── Stat cards clickable → navigate to section ────
+    document.querySelectorAll('.stat-card[data-nav]').forEach(card => {
+      const target = card.getAttribute('data-nav');
+      card.addEventListener('click', () => showSection(target));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showSection(target);
+        }
+      });
+    });
+
+    // ── Logout ────────────────────────────────────────
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('token');
+      window.location = '/login.html';
+    });
+
+    // ── Load dashboard stats ──────────────────────────
+    async function loadStats() {
+      try {
+        const res = await fetch('/api/admin/stats', { headers: authHeaders() });
+        if (!res.ok) throw new Error('not ok');
+        const d = await res.json();
+        document.getElementById('statEvents').textContent   = d.totalEvents   ?? '—';
+        document.getElementById('statBookings').textContent = d.totalBookings  ?? '—';
+        document.getElementById('statRevenue').textContent  = d.totalRevenue   ? '₹' + Math.min(parseFloat(d.totalRevenue) * 84, 10000).toLocaleString('en-IN', {maximumFractionDigits:0}) : '₹0';
+        document.getElementById('statTickets').textContent  = d.activeTickets  ?? '—';
+        document.getElementById('statUsers').textContent    = d.totalUsers     ?? '—';
+        document.getElementById('statTicketsSold').textContent = d.totalTicketsSold ?? '0';
+      } catch {
+        // DB not available — show zeros
+        document.getElementById('statEvents').textContent   = '25+';
+        document.getElementById('statBookings').textContent = '0';
+        document.getElementById('statRevenue').textContent  = '₹0';
+        document.getElementById('statTickets').textContent  = '0';
+        document.getElementById('statUsers').textContent    = '2';
+        document.getElementById('statTicketsSold').textContent = '0';
+        showToast('DB offline — showing demo stats', 'warning');
+      }
+    }
+
+    // ── Load recent bookings (dashboard) ─────────────
+    async function loadRecentBookings() {
+      const tbody = document.getElementById('recentBookingsBody');
+      try {
+        const res = await fetch('/api/admin/bookings', { headers: authHeaders() });
+        if (!res.ok) throw new Error('not ok');
+        const bookings = await res.json();
+        const recent   = bookings.slice(0, 8);
+        if (!recent.length) {
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4" style="color:var(--text-muted)">No bookings yet</td></tr>';
+          return;
+        }
+        tbody.innerHTML = recent.map(b => `
+          <tr>
+            <td>${b.user_email || b.email || '—'}</td>
+            <td>${b.event_title || b.title || '—'}</td>
+            <td>${b.quantity}</td>
+            <td>₹${Math.min(parseFloat(b.total_amount) * 84, 10000).toLocaleString('en-IN', {maximumFractionDigits:0})}</td>
+            <td><span class="status-active">${b.payment_status}</span></td>
+            <td>${new Date(b.created_at).toLocaleDateString('en-IN')}</td>
+          </tr>`).join('');
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4" style="color:var(--text-muted)">No bookings yet (DB offline)</td></tr>';
+      }
+    }
+
+    // ── Load events table ─────────────────────────────
+    async function loadAdminEvents() {
+      const tbody = document.getElementById('eventsTableBody');
+      tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">Loading...</td></tr>';
+      try {
+        const res = await fetch('/api/admin/events', { headers: authHeaders() });
+        if (!res.ok) throw new Error('not ok');
+        const events = await res.json();
+        if (!events.length) {
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">No events found. Click "+ Add Event" to create one.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = events.map(e => {
+          const sold = parseInt(e.tickets_sold) || 0;
+          const available = Math.max(0, (e.total_seats || 0) - sold);
+          const rev = parseFloat(e.revenue) || 0;
+          const soldPct = e.total_seats > 0 ? Math.round((sold / e.total_seats) * 100) : 0;
+          const soldColor = soldPct >= 80 ? '#dc2626' : soldPct >= 50 ? '#f59e0b' : '#16a34a';
+          return `
+          <tr>
+            <td style="color:var(--text-muted);font-size:0.8rem">${e.id}</td>
+            <td><strong>${e.title}</strong></td>
+            <td>${e.category}</td>
+            <td>${e.date_time ? new Date(e.date_time).toLocaleDateString('en-IN') : '—'}</td>
+            <td>${e.price == 0 ? '<span class="badge-free">FREE</span>' : '₹' + Math.min(parseFloat(e.price) * 84, 10000).toLocaleString('en-IN', {maximumFractionDigits:0})}</td>
+            <td>${e.total_seats}</td>
+            <td><span style="color:${soldColor};font-weight:700">${sold}</span> <span style="font-size:0.7rem;color:var(--text-muted)">(${soldPct}%)</span></td>
+            <td>${available}</td>
+            <td>₹${Math.min(rev * 84, 999999).toLocaleString('en-IN', {maximumFractionDigits:0})}</td>
+            <td style="white-space:nowrap">
+              <button class="btn btn-sm btn-outline-grad me-1" data-action="edit" data-event='${JSON.stringify(e).replace(/'/g,"&#39;")}'>Edit</button>
+              <button class="btn btn-sm" style="background:rgba(239,68,68,0.1);color:#dc2626;border:1px solid rgba(239,68,68,0.25);border-radius:8px;font-size:0.78rem;padding:0.25rem 0.65rem;cursor:pointer" data-action="delete" data-id="${e.id}" data-title="${e.title.replace(/"/g,'&quot;')}">Delete</button>
+            </td>
+          </tr>`;
+        }).join('');
+
+        // Attach edit/delete via event delegation
+        tbody.querySelectorAll('[data-action="edit"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const e = JSON.parse(btn.getAttribute('data-event'));
+            openEditForm(e);
+          });
+        });
+        tbody.querySelectorAll('[data-action="delete"]').forEach(btn => {
+          btn.addEventListener('click', () => deleteEvent(btn.dataset.id, btn.dataset.title));
+        });
+
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">Failed to load events — DB may be offline</td></tr>';
+      }
+    }
+
+    // ── Load all bookings ─────────────────────────────
+    async function loadBookings() {
+      const tbody = document.getElementById('bookingsTableBody');
+      tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">Loading...</td></tr>';
+      try {
+        const res = await fetch('/api/admin/bookings', { headers: authHeaders() });
+        if (!res.ok) throw new Error('not ok');
+        const bookings = await res.json();
+        if (!bookings.length) {
+          tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">No bookings yet</td></tr>';
+          return;
+        }
+        tbody.innerHTML = bookings.map(b => `
+          <tr>
+            <td style="color:var(--text-muted)">#${b.id}</td>
+            <td>${b.user_email || b.email || '—'}</td>
+            <td>${b.event_title || b.title || '—'}</td>
+            <td>${b.quantity}</td>
+            <td>₹${Math.min(parseFloat(b.total_amount) * 84, 10000).toLocaleString('en-IN', {maximumFractionDigits:0})}</td>
+            <td><span class="status-active">${b.payment_status}</span></td>
+            <td>${new Date(b.created_at).toLocaleDateString('en-IN')}</td>
+          </tr>`).join('');
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="10" class="text-center py-4" style="color:var(--text-muted)">No bookings yet (DB offline)</td></tr>';
+      }
+    }
+
+    // ── Add event form ────────────────────────────────
+    document.getElementById('btnAddEvent').addEventListener('click', () => {
+      document.getElementById('formEventId').value   = '';
+      document.getElementById('formTitle').value     = '';
+      document.getElementById('formDesc').value      = '';
+      document.getElementById('formVenue').value     = '';
+      document.getElementById('formDateTime').value  = '';
+      document.getElementById('formPrice').value     = '';
+      document.getElementById('formSeats').value     = '100';
+      document.getElementById('formImage').value     = '';
+      document.getElementById('formCategory').value  = 'Sports';
+      document.getElementById('formAlert').classList.add('d-none');
+      document.getElementById('eventFormTitle').textContent = 'Add New Event';
+      new bootstrap.Modal(document.getElementById('eventFormModal')).show();
+    });
+
+    // ── Edit event form ───────────────────────────────
+    function openEditForm(e) {
+      document.getElementById('formEventId').value   = e.id;
+      document.getElementById('formTitle').value     = e.title;
+      document.getElementById('formDesc').value      = e.description || '';
+      document.getElementById('formCategory').value  = e.category;
+      document.getElementById('formVenue').value     = e.venue;
+      document.getElementById('formDateTime').value  = e.date_time ? e.date_time.slice(0, 16) : '';
+      document.getElementById('formPrice').value     = e.price;
+      document.getElementById('formSeats').value     = e.total_seats;
+      document.getElementById('formImage').value     = e.image_url || '';
+      document.getElementById('formAlert').classList.add('d-none');
+      document.getElementById('eventFormTitle').textContent = 'Edit Event';
+      new bootstrap.Modal(document.getElementById('eventFormModal')).show();
+    }
+
+    // ── Save event (create or update) ─────────────────
+    document.getElementById('btnSaveEvent').addEventListener('click', async () => {
+      const id      = document.getElementById('formEventId').value;
+      const alertEl = document.getElementById('formAlert');
+      alertEl.classList.add('d-none');
+
+      const price = parseFloat(document.getElementById('formPrice').value) || 0;
+      if (price > 10000) {
+        alertEl.textContent = 'Price cannot exceed ₹10,000';
+        alertEl.classList.remove('d-none');
+        return;
+      }
+
+      const payload = {
+        title:       document.getElementById('formTitle').value.trim(),
+        description: document.getElementById('formDesc').value.trim(),
+        category:    document.getElementById('formCategory').value,
+        venue:       document.getElementById('formVenue').value.trim(),
+        date_time:   document.getElementById('formDateTime').value,
+        price:       price,
+        total_seats: parseInt(document.getElementById('formSeats').value) || 100,
+        image_url:   document.getElementById('formImage').value.trim() || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80',
+      };
+
+      if (!payload.title || !payload.venue || !payload.date_time) {
+        alertEl.textContent = 'Title, Venue and Date & Time are required.';
+        alertEl.classList.remove('d-none');
+        return;
+      }
+
+      try {
+        const url    = id ? `/api/admin/events/${id}` : '/api/admin/events';
+        const method = id ? 'PUT' : 'POST';
+        const res    = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
+        const j      = await res.json();
+        if (res.ok) {
+          bootstrap.Modal.getInstance(document.getElementById('eventFormModal')).hide();
+          showToast(id ? '✅ Event updated!' : '✅ Event created!', 'success');
+          loadAdminEvents();
+          loadStats();
+        } else {
+          alertEl.textContent = j.message || 'Failed to save event';
+          alertEl.classList.remove('d-none');
+        }
+      } catch {
+        alertEl.textContent = 'Server error — could not save event';
+        alertEl.classList.remove('d-none');
+      }
+    });
+
+    // ── Delete event ──────────────────────────────────
+    async function deleteEvent(id, title) {
+      if (!confirm(`Delete "${title}"?\nThis cannot be undone.`)) return;
+      try {
+        const res = await fetch(`/api/admin/events/${id}`, { method: 'DELETE', headers: authHeaders() });
+        if (res.ok) {
+          showToast(`"${title}" deleted`, 'info');
+          loadAdminEvents();
+          loadStats();
+        } else {
+          showToast('Failed to delete event', 'error');
+        }
+      } catch {
+        showToast('Server error', 'error');
+      }
+    }
+
+    // ── Initial data load ─────────────────────────────
+    loadStats();
+    loadRecentBookings();
+
+    }); // end DOMContentLoaded
+  </script>
+</body>
+</html>
