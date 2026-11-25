@@ -29,6 +29,9 @@ module.exports = {
   PUBLIC_DIR: path.join(ROOT, "public"),
   DB_FILE: process.env.DB_FILE || path.join(DATA_DIR, "eventhub.db"),
   PORT: Number(process.env.PORT) || 3000,
+  // Number of proxies in front of the app (Render, Railway, nginx…). Needed so
+  // rate limiting sees the visitor's real IP instead of the proxy's.
+  TRUST_PROXY: Number(process.env.TRUST_PROXY) || 0,
   BASE_URL: (process.env.BASE_URL || "").replace(/\/$/, ""),
   JWT_SECRET: secret("JWT_SECRET"),
   TICKET_SECRET: secret("TICKET_SECRET"),

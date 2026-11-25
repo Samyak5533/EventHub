@@ -38,6 +38,19 @@ The login screens have a "Demo" hint you can click to fill these in. To use diff
 
 Stop the server, delete `data/eventhub.db`, and start it again.
 
+## Deploy (free, on Render)
+
+The repo includes a `render.yaml`, so deploying is a few clicks:
+
+1. Sign in at [render.com](https://render.com) with GitHub.
+2. Choose **New → Blueprint**, pick this repo, and click **Apply**.
+3. Wait for the build (about 2–3 minutes). Your site is live at `https://eventhub-xxxx.onrender.com`.
+
+Things to know about the free plan:
+- **It sleeps when idle.** After 15 minutes without visitors it goes to sleep, and the next visit takes about 30–50 seconds to wake it.
+- **The database resets.** It starts fresh on every restart or deploy, which brings back the demo accounts and sample events. That suits a portfolio demo. For data that has to last, add a Render disk and set `DATA_DIR` to its mount path (paid plans).
+- **Other hosts:** to deploy somewhere other than Render, set `TRUST_PROXY=1` when the app runs behind a proxy or load balancer.
+
 ## How it works
 
 | Page | What it does |
