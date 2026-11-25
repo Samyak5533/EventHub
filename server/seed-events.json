@@ -1,0 +1,242 @@
+[
+  {
+    "title": "Lollapalooza 2026",
+    "description": "Four-day music festival featuring Charli XCX, Lorde, and Tate McRae as headliners with 100+ artists across 8 stages in Grant Park.",
+    "category": "Music",
+    "venue": "Grant Park, Chicago, IL",
+    "total_seats": 5000,
+    "price": 99,
+    "image_url": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80",
+    "days_from_now": 60
+  },
+  {
+    "title": "Coachella Valley Music & Arts Festival",
+    "description": "The legendary desert music festival headlined by Sabrina Carpenter and Justin Bieber. World-class art installations and 100+ performers.",
+    "category": "Concerts",
+    "venue": "Empire Polo Club, Indio, CA",
+    "total_seats": 3000,
+    "price": 119,
+    "image_url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=80",
+    "days_from_now": 20
+  },
+  {
+    "title": "Netflix Is a Joke Fest 2026",
+    "description": "Week-long comedy extravaganza with 350+ live events across 35+ venues in Hollywood. Features the biggest names in comedy.",
+    "category": "Stand-up comedy",
+    "venue": "Hollywood Bowl, Los Angeles, CA",
+    "total_seats": 1500,
+    "price": 65,
+    "image_url": "https://images.unsplash.com/photo-1527224857830-43a7acc85260?w=600&q=80",
+    "days_from_now": 35
+  },
+  {
+    "title": "NVIDIA GTC AI Conference 2026",
+    "description": "Premier AI and GPU technology conference with hundreds of sessions on generative AI, robotics, and deep learning. Keynote by Jensen Huang.",
+    "category": "Webinars",
+    "venue": "San Jose Convention Center, CA",
+    "total_seats": 2000,
+    "price": 99,
+    "image_url": "https://images.pexels.com/photos/8849295/pexels-photo-8849295.jpeg",
+    "days_from_now": 15
+  },
+  {
+    "title": "Salsa Night",
+    "description": "Dance the night away with expert salsa instructors. Beginners welcome — come solo or bring a partner!",
+    "category": "Dance",
+    "venue": "Dance Studio Arena, Downtown",
+    "total_seats": 150,
+    "price": 8,
+    "image_url": "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=600&q=80",
+    "days_from_now": 7
+  },
+  {
+    "title": "City Marathon 2026",
+    "description": "Annual city marathon open to all fitness levels. 5K, 10K and full marathon categories available for runners of all abilities.",
+    "category": "Sports",
+    "venue": "Central Park, New York",
+    "total_seats": 500,
+    "price": 15,
+    "image_url": "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=600&q=80",
+    "days_from_now": 45
+  },
+  {
+    "title": "TEDx Mumbai 2026",
+    "description": "A day of TED-style talks by local innovators, entrepreneurs, and thinkers. Theme: \"Futures Reimagined.\" Networking lunch included.",
+    "category": "Other",
+    "venue": "NSCI Dome, Mumbai, India",
+    "total_seats": 400,
+    "price": 18,
+    "image_url": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80",
+    "days_from_now": 25
+  },
+  {
+    "title": "Newport Jazz Festival 2026",
+    "description": "Three-day outdoor jazz showcase at historic Fort Adams State Park featuring jazz legends and rising stars on the Newport Harbor.",
+    "category": "Music",
+    "venue": "Fort Adams State Park, Newport, RI",
+    "total_seats": 800,
+    "price": 89,
+    "image_url": "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=600&q=80",
+    "days_from_now": 90
+  },
+  {
+    "title": "Rolling Loud Hip Hop Festival",
+    "description": "Three-day hip-hop mega-festival featuring Chief Keef, Destroy Lonely, Sexyy Red and more. The world's largest hip-hop festival.",
+    "category": "Concerts",
+    "venue": "Hard Rock Stadium, Miami, FL",
+    "total_seats": 4000,
+    "price": 119,
+    "image_url": "https://images.unsplash.com/photo-1665993546564-835ebe981745?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "days_from_now": 80
+  },
+  {
+    "title": "AI Developer Summit 2026",
+    "description": "Two-day AI developer conference with hands-on workshops on LLMs, RAG, agents, and production AI systems. Led by top industry experts.",
+    "category": "Webinars",
+    "venue": "San Francisco Marriott Marquis, CA",
+    "total_seats": 1500,
+    "price": 79,
+    "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+    "days_from_now": 70
+  },
+  {
+    "title": "NYC Ballet Spring Gala 2026",
+    "description": "Classical ballet featuring Firebird and Coppelia with world premiere performances by NYCB principal dancers at the prestigious Lincoln Center.",
+    "category": "Dance",
+    "venue": "David H. Koch Theater, New York, NY",
+    "total_seats": 900,
+    "price": 79,
+    "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80",
+    "days_from_now": 40
+  },
+  {
+    "title": "Welcome to Rockville 2026",
+    "description": "Four-day rock festival featuring Foo Fighters, The Offspring, and My Chemical Romance at Daytona International Speedway.",
+    "category": "Concerts",
+    "venue": "Daytona International Speedway, FL",
+    "total_seats": 4000,
+    "price": 119,
+    "image_url": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80",
+    "days_from_now": 42
+  },
+  {
+    "title": "The Riot Comedy Festival 2026",
+    "description": "Four-day comedy festival with stand-up, improv, and sketch comedy from acclaimed comedians across multiple stages.",
+    "category": "Stand-up comedy",
+    "venue": "Revention Music Center, Houston, TX",
+    "total_seats": 600,
+    "price": 45,
+    "image_url": "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=600&q=80",
+    "days_from_now": 150
+  },
+  {
+    "title": "Mumbai Marathon 2026",
+    "description": "Annual mass participation marathon with 5K, 10K, half and full marathon categories. India's largest running event with international elite athletes.",
+    "category": "Sports",
+    "venue": "Marine Drive, Mumbai, India",
+    "total_seats": 3000,
+    "price": 12,
+    "image_url": "https://images.unsplash.com/photo-1461897104016-0b3b00cc81ee?w=600&q=80",
+    "days_from_now": 30
+  },
+  {
+    "title": "Anime & Gaming Convention 2026",
+    "description": "Two-day fan convention celebrating anime, manga, cosplay, and gaming. Celebrity voice actors, cosplay contests, and exclusive screenings.",
+    "category": "Other",
+    "venue": "Bombay Exhibition Centre, Mumbai",
+    "total_seats": 1500,
+    "price": 15,
+    "image_url": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&q=80",
+    "days_from_now": 120
+  },
+  {
+    "title": "Diwali Cultural Night & Mela",
+    "description": "Grand Festival of Lights celebration with folk performances, fireworks, traditional food stalls, art exhibitions and live Bollywood music.",
+    "category": "Other",
+    "venue": "Exhibition Ground, Ahmedabad, India",
+    "total_seats": 2000,
+    "price": 5,
+    "image_url": "https://images.unsplash.com/photo-1672107501496-156fe85ec6c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "days_from_now": 200
+  },
+  {
+    "title": "Electric Daisy Carnival Vegas",
+    "description": "One of the world's largest EDM festivals with massive stages, art cars, carnival rides and fireworks. 3 nights of non-stop electronic music.",
+    "category": "Concerts",
+    "venue": "Las Vegas Motor Speedway, NV",
+    "total_seats": 6000,
+    "price": 119,
+    "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80",
+    "days_from_now": 50
+  },
+  {
+    "title": "LA Singles Speed Dating — Santa Monica",
+    "description": "Popular singles event in Santa Monica with beautiful ocean views. Pre-event mingling, structured speed dates, and optional post-event dinner.",
+    "category": "Dating events",
+    "venue": "The Georgian Hotel, Santa Monica, CA",
+    "total_seats": 70,
+    "price": 40,
+    "image_url": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80",
+    "days_from_now": 17
+  },
+  {
+    "title": "Berkshire Yoga & Wellness Festival",
+    "description": "Weekend yoga festival with 80+ teachers for 1000+ attendees. Morning flows, evening meditations, sound baths, and wellness workshops.",
+    "category": "Dance",
+    "venue": "Berkshire School of Music, Lenox, MA",
+    "total_seats": 500,
+    "price": 99,
+    "image_url": "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600&q=80",
+    "days_from_now": 85
+  },
+  {
+    "title": "RockFest Live",
+    "description": "Top rock bands performing live on three stages. An unforgettable night of classic rock and modern alternative music.",
+    "category": "Concerts",
+    "venue": "Arena Stadium, City Center",
+    "total_seats": 800,
+    "price": 30,
+    "image_url": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=600&q=80",
+    "days_from_now": 55
+  },
+  {
+    "title": "Classical Evening",
+    "description": "Symphony orchestra performs classical masterpieces by Beethoven, Mozart, and Chopin in a grand concert hall.",
+    "category": "Music",
+    "venue": "Grand Concert Hall, Downtown",
+    "total_seats": 400,
+    "price": 25,
+    "image_url": "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&q=80",
+    "days_from_now": 33
+  },
+  {
+    "title": "Basketball Finals",
+    "description": "Regional basketball championship finals. Watch the best teams battle it out for the title in this electrifying atmosphere.",
+    "category": "Sports",
+    "venue": "Sports Complex Hall",
+    "total_seats": 1000,
+    "price": 20,
+    "image_url": "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=80",
+    "days_from_now": 22
+  },
+  {
+    "title": "K-Pop Dance Workshop",
+    "description": "Learn iconic K-pop choreography from certified instructors. All skill levels welcome — from BTS to BLACKPINK moves!",
+    "category": "Dance",
+    "venue": "Studio 5 Dance Academy",
+    "total_seats": 100,
+    "price": 12,
+    "image_url": "https://images.unsplash.com/photo-1502904550040-7534597429ae?w=600&q=80",
+    "days_from_now": 12
+  },
+  {
+    "title": "Digital Marketing Masterclass",
+    "description": "Improve your online presence with expert-led sessions on SEO, social media, paid ads, and content marketing strategies.",
+    "category": "Webinars",
+    "venue": "Online (Google Meet)",
+    "total_seats": 1000,
+    "price": 5,
+    "image_url": "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=600&q=80",
+    "days_from_now": 5
+  }
+]

@@ -1,0 +1,560 @@
+/* Motion for EventHub. Loaded after styles.css.
+   Everything here is turned off for people who prefer reduced motion (bottom of file). */
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Page enter / leave */
+
+body {
+  animation: pageIn 0.6s var(--ease) backwards;
+}
+html.is-leaving body {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important;
+}
+
+/* Background */
+
+.bg-aurora span:nth-child(1) { animation: drift1 22s ease-in-out infinite; }
+.bg-aurora span:nth-child(2) { animation: drift2 26s ease-in-out infinite; }
+.bg-aurora span:nth-child(3) { animation: drift3 30s ease-in-out infinite; }
+
+@keyframes drift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(12vw, 8vh) scale(1.15); }
+}
+@keyframes drift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-14vw, 12vh) scale(0.9); }
+}
+@keyframes drift3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10vw, -12vh) scale(1.1); }
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes progress {
+  to { transform: scaleX(1); }
+}
+
+/* Reveal on scroll (common.js adds .is-visible) */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transition-delay: var(--delay, 0ms);
+}
+.js [data-reveal="zoom"] {
+  transform: scale(0.94);
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Headline split into words by common.js */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+}
+.word > span {
+  display: inline-block;
+  animation: wordUp 0.9s var(--ease) backwards;
+  animation-delay: calc(var(--i) * 70ms + 150ms);
+}
+@keyframes wordUp {
+  from { transform: translateY(105%) rotate(4deg); opacity: 0; }
+}
+
+.rise {
+  animation: rise 0.9s var(--ease) backwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+}
+
+.text-grad {
+  animation: shimmerText 6s ease-in-out infinite;
+}
+@keyframes shimmerText {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.eyebrow .dot {
+  animation: ping 2s ease-out infinite;
+}
+@keyframes ping {
+  0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.6); }
+  80%, 100% { box-shadow: 0 0 0 8px rgba(45, 212, 191, 0); }
+}
+
+/* Navbar */
+
+.nav-wrap {
+  animation: navDrop 0.8s var(--spring) backwards;
+}
+@keyframes navDrop {
+  from { opacity: 0; transform: translateY(-30px); }
+}
+.brand-mark {
+  transition: transform 0.5s var(--spring);
+}
+.brand:hover .brand-mark {
+  transform: rotate(-12deg) scale(1.08);
+}
+.theme-toggle i {
+  display: inline-block;
+}
+.theme-toggle.is-spinning i {
+  animation: spinIn 0.5s var(--spring);
+}
+@keyframes spinIn {
+  from { transform: rotate(-180deg) scale(0.4); opacity: 0; }
+}
+
+/* Hero ticket */
+
+.ticket-float {
+  animation: floaty 6s ease-in-out infinite;
+}
+@keyframes floaty {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -16px; }
+}
+.ticket3d .holo {
+  animation: holo 5s ease-in-out infinite;
+}
+@keyframes holo {
+  0% { background-position: 120% 120%; }
+  60%, 100% { background-position: -40% -40%; }
+}
+.ticket3d-qr svg rect.q {
+  animation: qrBlink 3s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes qrBlink {
+  0%, 85%, 100% { opacity: 1; }
+  90% { opacity: 0.25; }
+}
+
+.float-chip {
+  animation: bob 5s ease-in-out infinite;
+}
+.float-chip--b { animation-delay: -1.6s; }
+.float-chip--c { animation-delay: -3.2s; }
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+/* Marquee */
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Buttons */
+
+.button--primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.45) 50%, transparent 75%);
+  transform: translateX(-120%);
+  transition: transform 0.8s var(--ease);
+}
+.button--primary:hover::after {
+  transform: translateX(120%);
+}
+
+/* Magnetic elements move with "translate" so they don't fight other transforms */
+[data-magnetic] {
+  translate: var(--tx, 0) var(--ty, 0);
+  transition: translate 0.35s var(--ease), transform 0.25s var(--ease), box-shadow 0.3s ease, background-position 0.6s ease;
+}
+
+.ripple {
+  transform: scale(0);
+  animation: ripple 0.65s ease-out forwards;
+}
+@keyframes ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+.btn-spinner {
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.shake {
+  animation: shake 0.45s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Event cards */
+
+.event-card::before {
+  /* spinning gradient border, shown on hover */
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle), transparent 0 55%, var(--teal), var(--cyan), var(--blue), transparent 95%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: spinAngle 3.5s linear infinite;
+}
+.event-card:hover::before {
+  opacity: 1;
+}
+@keyframes spinAngle {
+  to { --angle: 360deg; }
+}
+
+[data-spotlight] {
+  --mx: 50%;
+  --my: 50%;
+}
+.event-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(400px circle at var(--mx) var(--my), rgba(45, 212, 191, 0.12), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.event-card:hover::after {
+  opacity: 1;
+}
+
+.card-in {
+  animation: cardIn 0.75s var(--ease) backwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: perspective(1000px) translateY(40px) rotateX(12deg) scale(0.96); }
+}
+
+.seats-bar i {
+  animation: grow 1.3s var(--ease) backwards;
+  animation-delay: calc(var(--delay, 0ms) + 300ms);
+}
+@keyframes grow {
+  from { transform: scaleX(0); }
+}
+
+.event-hot:not(.is-sold) {
+  animation: hot 1.6s ease-in-out infinite;
+}
+@keyframes hot {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.55); }
+  50% { transform: scale(1.06); box-shadow: 0 0 0 7px rgba(244, 63, 94, 0); }
+}
+
+.event-price {
+  transition: transform 0.4s var(--spring);
+}
+.event-card:hover .event-price {
+  transform: scale(1.08) rotate(-3deg);
+}
+.event-date {
+  transition: transform 0.4s var(--spring);
+}
+.event-card:hover .event-date {
+  transform: translateY(-4px) rotate(-4deg);
+}
+
+.skeleton {
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+.state-icon {
+  animation: floaty 4s ease-in-out infinite;
+}
+
+/* Steps & CTA */
+
+.step {
+  transition: transform 0.4s var(--ease), border-color 0.3s ease;
+}
+.step:hover {
+  transform: translateY(-6px);
+  border-color: rgba(45, 212, 191, 0.4);
+}
+.step:hover .step-icon {
+  animation: iconPop 0.6s var(--spring);
+}
+@keyframes iconPop {
+  40% { transform: scale(1.15) rotate(-8deg); }
+}
+
+.cta-band::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: -1;
+  background: conic-gradient(from var(--angle), transparent, rgba(45, 212, 191, 0.25), transparent 30%);
+  animation: spinAngle 8s linear infinite;
+}
+.cta-band {
+  isolation: isolate;
+}
+
+/* Modals */
+
+.modal.fade .modal-dialog {
+  transform: translateY(50px) scale(0.94);
+  transition: transform 0.5s var(--spring), opacity 0.3s ease;
+}
+.modal.show .modal-dialog {
+  transform: none;
+}
+.modal-backdrop.show {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.modal.show .event-modal-media img {
+  animation: kenBurns 12s ease-out both;
+}
+@keyframes kenBurns {
+  from { transform: scale(1.15); }
+}
+.modal.show .booking-box {
+  animation: rise 0.7s var(--ease) 0.15s backwards;
+}
+.pop {
+  animation: pop 0.5s var(--spring) backwards;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.85); }
+}
+
+/* Toasts */
+
+.toast-item {
+  animation: toastIn 0.55s var(--spring) backwards;
+}
+.toast-item.is-leaving {
+  animation: toastOut 0.3s ease forwards;
+}
+.toast-progress {
+  animation: toastBar var(--toast-ms, 3800ms) linear forwards;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(80px) scale(0.9); }
+}
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(40px); }
+}
+@keyframes toastBar {
+  to { transform: scaleX(0); }
+}
+
+/* Confetti */
+
+.confetti-layer i {
+  animation: confetti 1.7s cubic-bezier(0.15, 0.6, 0.3, 1) forwards;
+}
+@keyframes confetti {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  55% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 320px)) rotate(calc(var(--rot) * 2)); opacity: 0; }
+}
+
+/* Auth pages */
+
+.auth-form > * {
+  animation: rise 0.8s var(--ease) backwards;
+}
+.auth-form > :nth-child(2) { animation-delay: 60ms; }
+.auth-form > :nth-child(3) { animation-delay: 120ms; }
+.auth-form > :nth-child(4) { animation-delay: 180ms; }
+.auth-form > :nth-child(5) { animation-delay: 240ms; }
+.auth-form > :nth-child(6) { animation-delay: 300ms; }
+.auth-form > :nth-child(7) { animation-delay: 360ms; }
+.auth-form > :nth-child(n + 8) { animation-delay: 420ms; }
+
+.auth-perks li {
+  animation: rise 0.8s var(--ease) backwards;
+}
+.auth-perks li:nth-child(1) { animation-delay: 300ms; }
+.auth-perks li:nth-child(2) { animation-delay: 400ms; }
+.auth-perks li:nth-child(3) { animation-delay: 500ms; }
+
+/* Tickets */
+
+.ticket {
+  animation: ticketIn 0.7s var(--ease) backwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes ticketIn {
+  from { opacity: 0; transform: translateX(-40px); }
+}
+.ticket-stub img {
+  animation: pop 0.7s var(--spring) backwards;
+  animation-delay: calc(var(--delay, 0ms) + 250ms);
+  transition: transform 0.4s var(--spring);
+}
+.ticket:hover .ticket-stub img {
+  transform: scale(1.06) rotate(-2deg);
+}
+.badge-status--ok::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: ping 2s ease-out infinite;
+}
+
+/* Status pages */
+
+.loading-bar span {
+  animation: indeterminate 1.3s ease-in-out infinite;
+}
+@keyframes indeterminate {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(260%); }
+}
+.check-svg {
+  width: 88px;
+  height: 88px;
+  display: block;
+  margin: 0 auto;
+}
+.check-svg circle {
+  stroke-dasharray: 252;
+  stroke-dashoffset: 252;
+  animation: draw 0.8s var(--ease) forwards;
+}
+.check-svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: draw 0.5s var(--ease) 0.65s forwards;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+.big-404 {
+  animation: floaty 5s ease-in-out infinite;
+}
+
+/* Scanner */
+
+#reader.is-scanning::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 10%;
+  height: 3px;
+  z-index: 5;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, #2dd4bf, transparent);
+  box-shadow: 0 0 20px 4px rgba(45, 212, 191, 0.6);
+  animation: scanLine 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes scanLine {
+  50% { top: 88%; }
+}
+.scan-result.success,
+.scan-result.error {
+  animation: pop 0.45s var(--spring) backwards;
+}
+.scan-result.error {
+  animation: pop 0.45s var(--spring) backwards, shake 0.45s ease 0.1s;
+}
+
+/* Admin */
+
+.stat-card {
+  animation: cardIn 0.7s var(--ease) backwards;
+  animation-delay: var(--delay, 0ms);
+}
+.admin-section.is-active {
+  animation: rise 0.5s var(--ease) backwards;
+}
+.row-in {
+  animation: rowIn 0.45s var(--ease) backwards;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(10px); }
+}
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .bg-aurora {
+    display: none;
+  }
+}
