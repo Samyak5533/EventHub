@@ -1,12 +1,13 @@
 const express = require("express");
 const helmet = require("helmet");
 const { rateLimit } = require("express-rate-limit");
-const { PUBLIC_DIR } = require("./config");
+const { PUBLIC_DIR, TRUST_PROXY } = require("./config");
 const { BookingError } = require("./services/booking");
 
 function createApp() {
   const app = express();
   app.disable("x-powered-by");
+  if (TRUST_PROXY) app.set("trust proxy", TRUST_PROXY);
 
   // Security headers. The CSP allows only this site plus the CDNs the pages
   // use (Bootstrap, the QR scanner library, Google Fonts) and https images.
