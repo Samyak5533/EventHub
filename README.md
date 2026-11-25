@@ -2,6 +2,8 @@
 
 College project: discover events, book tickets, get a QR ticket, and verify it at the door.
 
+**Live demo: [eventhub-47q3.onrender.com](https://eventhub-47q3.onrender.com)**. Log in with `demo@eventhub.com` / `demo123`, or `admin@eventhub.com` / `admin123` for the dashboard. It's on a free plan, so the first visit after a quiet spell can take about 30 seconds to wake up.
+
 - **Frontend:** plain HTML, CSS and JavaScript in `public/` (Bootstrap for the grid and modals, Bootstrap Icons)
 - **Backend:** Node.js + Express in `server/`, with a SQLite database (a single file, nothing to install)
 
